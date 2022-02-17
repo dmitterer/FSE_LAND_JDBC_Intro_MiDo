@@ -6,11 +6,11 @@ public class JdbcDemo {
 
         System.out.println("JDBC Demo!");
         sellectAllDemo();
-        //insertStundetDemo();
+        insertStundetDemo("David Föger", "da.foeg@gmail.com");
         //sellectAllDemo();
-        //updateStudentDemo();
+        updateStudentDemo(3, "Harry Potter", "harry.potter@gmx.net");
         sellectAllDemo();
-        deleteStudentDemo(4);
+       // deleteStudentDemo(4);
         sellectAllDemo();
 
 
@@ -56,7 +56,7 @@ public class JdbcDemo {
     }
 
 
-    public static void updateStudentDemo()
+    public static void updateStudentDemo( int id, String neuerName, String neueEMail)
     {
         System.out.println("Update Demo mit Jdbc");
 
@@ -70,13 +70,14 @@ public class JdbcDemo {
             System.out.println("Verbindung zur DB hergestellt!");
 
             PreparedStatement preparedStatement = conn.prepareStatement(
-                    "UPDATE `student` SET `name` = ? , `email` = ? WHERE `student`.`id` = 2");
+                    "UPDATE `student` SET `name` = ? , `email` = ? WHERE `student`.`id` = ?");
 
             try
             {
 
-                preparedStatement.setString(1, "Anna-Lena Müller");
-                preparedStatement.setString(2,"anl.mueller25@gmx.at");
+                preparedStatement.setInt(3, id);
+                preparedStatement.setString(1, neuerName);
+                preparedStatement.setString(2,neueEMail);
                 int affectedRows = preparedStatement.executeUpdate();
                 System.out.println("Anzahl der aktualisierten Datensätze: " + affectedRows);
             }catch (SQLException ex)
@@ -95,7 +96,7 @@ public class JdbcDemo {
     }
 
 
-    public static void insertStundetDemo(){
+    public static void insertStundetDemo(String name, String email){
 
         System.out.println("Insert Demo mit Jdbc");
 
@@ -114,8 +115,8 @@ public class JdbcDemo {
             try
             {
 
-                preparedStatement.setString(1, "Daniel Egger");
-                preparedStatement.setString(2, "da.egger@tsn.at");
+                preparedStatement.setString(1, name);
+                preparedStatement.setString(2, email);
                 int rowAffected = preparedStatement.executeUpdate();
                 System.out.println(rowAffected + " Datensätze eingefügt");
 
