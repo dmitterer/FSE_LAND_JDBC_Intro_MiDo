@@ -8,10 +8,53 @@ public class JdbcDemo {
         sellectAllDemo();
         //insertStundetDemo();
         //sellectAllDemo();
-        updateStudentDemo();
+        //updateStudentDemo();
+        sellectAllDemo();
+        deleteStudentDemo(4);
         sellectAllDemo();
 
+
     }
+
+    public static void deleteStudentDemo(int studentId)
+    {
+
+        System.out.println("Delete Demo mit Jdbc");
+
+        String connectionUrl = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String user = "root";
+        String pwd = "";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, user, pwd))
+
+        {
+            System.out.println("Verbindung zur DB hergestellt!");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "DELETE FROM `student` WHERE `student`.`id` = ?");
+
+            try
+            {
+
+                preparedStatement.setInt(1, studentId);
+                int rowAffected = preparedStatement.executeUpdate();
+                System.out.println("Anzahl der gelöschten Datensätze: " + rowAffected);
+
+            }catch (SQLException ex)
+            {
+
+                System.out.println("Fehler im SQL-Delete Statement: " + ex.getMessage());
+
+            }
+
+        } catch (SQLException e){
+
+            System.out.println("Fehler beim Aufbau der Verbindung zur Datenbank: " + e.getMessage());
+
+        }
+
+    }
+
 
     public static void updateStudentDemo()
     {
