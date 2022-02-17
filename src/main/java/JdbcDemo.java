@@ -1,6 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JdbcDemo {
 
@@ -16,7 +14,6 @@ public class JdbcDemo {
 
         System.out.println("Select Demo mit Jdbc");
 
-        String sqlSelectAllPersons = "Select * from `student`";
         String connectionUrl = "jdbc:mysql://localhost:3306/jdbcdemo";
         String user = "root";
         String pwd = "";
@@ -25,6 +22,20 @@ public class JdbcDemo {
 
         {
             System.out.println("Verbindung zur DB hergestellt!");
+
+            PreparedStatement preparedStatement = conn.prepareStatement( "Select * from `student`");
+            ResultSet rs =  preparedStatement.executeQuery();
+            while (rs.next())
+            {
+               int id = rs.getInt("id");
+               String name = rs.getString("name");
+               String email = rs.getString("email");
+
+                System.out.println("Student aus der DB: Id: " + id + " | Name: " + name + " | Email: " + email);
+
+            }
+
+
         } catch (SQLException e){
 
             System.out.println("Fehler beim Aufbau der Verbindung zur Datenbank: " + e.getMessage());
