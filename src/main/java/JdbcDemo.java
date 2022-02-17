@@ -6,10 +6,51 @@ public class JdbcDemo {
 
         System.out.println("JDBC Demo!");
         sellectAllDemo();
-        insertStundetDemo();
+        //insertStundetDemo();
+        //sellectAllDemo();
+        updateStudentDemo();
         sellectAllDemo();
 
     }
+
+    public static void updateStudentDemo()
+    {
+        System.out.println("Update Demo mit Jdbc");
+
+        String connectionUrl = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String user = "root";
+        String pwd = "";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, user, pwd))
+
+        {
+            System.out.println("Verbindung zur DB hergestellt!");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "UPDATE `student` SET `name` = ? , `email` = ? WHERE `student`.`id` = 2");
+
+            try
+            {
+
+                preparedStatement.setString(1, "Anna-Lena Müller");
+                preparedStatement.setString(2,"anl.mueller25@gmx.at");
+                int affectedRows = preparedStatement.executeUpdate();
+                System.out.println("Anzahl der aktualisierten Datensätze: " + affectedRows);
+            }catch (SQLException ex)
+            {
+
+                System.out.println("Fehler im SQL-Update Statement: " + ex.getMessage());
+
+            }
+
+        } catch (SQLException e){
+
+            System.out.println("Fehler beim Aufbau der Verbindung zur Datenbank: " + e.getMessage());
+
+        }
+
+    }
+
 
     public static void insertStundetDemo(){
 
@@ -48,8 +89,6 @@ public class JdbcDemo {
             System.out.println("Fehler beim Aufbau der Verbindung zur Datenbank: " + e.getMessage());
 
         }
-
-
 
     }
 
