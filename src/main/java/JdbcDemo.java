@@ -5,16 +5,96 @@ public class JdbcDemo {
     public static void main(String[] args) {
 
         System.out.println("JDBC Demo!");
-        selectAllDemo();
+       // selectAllDemo();
        // insertStudentDemo("David Föger", "da.foeg@gmail.com");
         //selectAllDemo();
        // updateStudentDemo(3, "Harry Potter", "harry.potter@gmx.net");
-        selectAllDemo();
+        //selectAllDemo();
        // deleteStudentDemo(4);
-        selectAllDemo();
-       findAllByNameLike("%D%");
+        //selectAllDemo();
+       //findAllByNameLike("%D%");
+       selectAllDemoKurs();
+        insertKursDemo("Mathe", "Heinz Müller", "Karl Maier");
+        insertKursDemo("Deutsch", "Frida Fröhlich", "Gabi Groß");
+        insertKursDemo("Französisch", "Günther", "Francine LeBlanc");
+        selectAllDemoKurs();
+
+    }
+
+    public static void insertKursDemo(String kurname, String kurbesu, String kurleit){
+
+        System.out.println("Insert Demo mit Jdbc");
+
+        String connectionUrl = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String user = "root";
+        String pwd = "";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, user, pwd))
+
+        {
+            System.out.println("Verbindung zur DB hergestellt!");
+
+            PreparedStatement preparedStatement = conn.prepareStatement(
+                    "INSERT INTO `kurse` (`kurid`, `kurname`, `kurbesu`, `kurleit`) VALUES (NULL, ?, ?, ?)");
+
+            try
+            {
+
+                preparedStatement.setString(1, kurname);
+                preparedStatement.setString(2, kurbesu);
+                preparedStatement.setString(3, kurleit);
+                int rowAffected = preparedStatement.executeUpdate();
+                System.out.println(rowAffected + " Datensätze eingefügt");
 
 
+            }catch (SQLException ex)
+            {
+
+                System.out.println("Fehler im SQL-Insert Statement: " + ex.getMessage());
+
+            }
+
+        } catch (SQLException e){
+
+            System.out.println("Fehler beim Aufbau der Verbindung zur Datenbank: " + e.getMessage());
+
+        }
+
+    }
+    public static void selectAllDemoKurs(){
+
+
+        System.out.println("Select Demo Kurs mit Jdbc");
+
+        String connectionUrl = "jdbc:mysql://localhost:3306/jdbcdemo";
+        String user = "root";
+        String pwd = "";
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl, user, pwd))
+
+        {
+            System.out.println("Verbindung zur DB hergestellt!");
+
+            PreparedStatement preparedStatement = conn.prepareStatement( "Select * from `kurse`");
+            ResultSet rs =  preparedStatement.executeQuery();
+            while (rs.next())
+            {
+                int kurid = rs.getInt("kurid");
+                String kurname = rs.getString("kurname");
+                String kurbesu = rs.getString("kurbesu");
+                String kurleit = rs.getString("kurleit");
+
+
+                System.out.println("Student aus der DB: KursId: " + kurid + " | Kursname: " + kurname + " | Kursbesucher: " + kurbesu + "| Kursleiter: " + kurleit);
+
+            }
+
+
+        } catch (SQLException e){
+
+            System.out.println("Fehler beim Aufbau der Verbindung zur Datenbank: " + e.getMessage());
+
+        }
     }
 
     private static void findAllByNameLike(String pattern)
